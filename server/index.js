@@ -16,7 +16,7 @@ const __dirname = process.cwd();
 app.use(helmet());
 
 app.use(cors({
-	origin: "http://localhost:3000",
+	origin: process.env.FRONTEND_URL,
 	methods: ["GET", "POST" , "PUT", "DELETE"],
 	credentials: true,
 }));
