@@ -31,6 +31,9 @@ export default function AllPostsPage() {
             setPage(pageNum);
         } catch (err) {
             console.error("Error fetching posts:", err);
+            if (err.response?.status === 401) {
+                router.push("/signin");
+            }
         } finally {
             setLoading(false);
         }
@@ -56,6 +59,9 @@ export default function AllPostsPage() {
             fetchPosts();
         } catch (err) {
             console.error(err);
+            if (err.response?.status === 401) {
+                router.push("/signin");
+            }
         }
     };
 

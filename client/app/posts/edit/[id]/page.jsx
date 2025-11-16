@@ -18,6 +18,9 @@ export default function EditPostPage() {
                 setPost(res.data.posts);
             } catch (err) {
                 console.error(err);
+                if (err.response?.status === 401) {
+                    router.push("/signin");
+                }
             }
         };
         fetchPost();
@@ -32,6 +35,9 @@ export default function EditPostPage() {
             router.push("/posts");
         } catch (err) {
             console.error(err);
+            if (err.response?.status === 401) {
+                router.push("/signin");
+            }
         }
     };
 

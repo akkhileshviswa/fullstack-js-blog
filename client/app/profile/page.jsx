@@ -25,8 +25,9 @@ export default function ProfilePage() {
                 setProfile(res.data);
             } catch (err) {
                 console.error(err);
-                handleLogout();
-                router.push("/signin");
+                if (err.response?.status === 401) {
+                    router.push("/signin");
+                }
             }
         };
 
@@ -39,7 +40,7 @@ export default function ProfilePage() {
         <div className="max-w-md mx-auto mt-10 text-center">
             <h1 className="text-2xl font-bold mb-4">Welcome, {profile.name}</h1>
             <button onClick={() => router.push("/posts")}
-                className="bg-green-600 text-white py-2 rounded hover:bg-green-700 transition">
+                className="bg-green-600 text-white py-2 mr-2.5 px-4 rounded hover:bg-green-700 transition">
                 View Posts
             </button>
             <button onClick={handleLogout} className="bg-red-500 text-white mt-4 px-4 py-2 rounded">

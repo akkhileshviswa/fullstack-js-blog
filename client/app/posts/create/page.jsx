@@ -15,6 +15,9 @@ export default function CreatePostPage() {
             router.push("/posts");
         } catch (err) {
             console.error(err);
+            if (err.response?.status === 401) {
+                router.push("/signin");
+            }
         }
     };
 
