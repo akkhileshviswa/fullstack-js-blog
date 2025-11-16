@@ -13,7 +13,15 @@ export const protect = (req, res, next) => {
 
     const decoded = verifyToken(token);
 
-    if (!decoded) return res.status(401).json({ message: "Invalid or expired token" });
+    if (!decoded) {
+        res.clearCookie("token", {
+            httpOnly: true,
+            secure: process.env.ENVIRONMENT === "prod",
+            sameSite: "lax",
+        });
+
+        return res.status(401).json({ message: "Session expired. Login to Continue!" });
+    }
 
     req.user = decoded;
     next();
