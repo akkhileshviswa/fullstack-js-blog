@@ -1,6 +1,7 @@
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import { supabase } from "../config/supabaseClient.js";
+import { generateToken } from "../utils/jwt.js";
 
 passport.use(
     new GoogleStrategy(
@@ -44,8 +45,18 @@ passport.use(
 
                     finalUser = user;
                 }
+                const token = generateToken(data.id);
+                res.cookie("token",
+                    token,
+                    {
+                        httpOnly: true,
+                        secure: process.env.ENVIRONMENT === "prod",
+                        sameSite: "none",
+                        maxAge: 60 * 60 * 1000
+                    }
+                );
 
-                done(null, finalUser);
+                done(null, {user:finalUser, token});
             } catch (err) {
                 done(err, null);
             }

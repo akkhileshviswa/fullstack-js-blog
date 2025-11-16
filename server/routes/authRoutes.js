@@ -2,7 +2,6 @@ import express from "express";
 import { signup, signin, getProfile, logout } from "../controllers/authController.js";
 import passport from "../middlewares/passport.js"
 import { protect } from "../middlewares/authMiddleware.js";
-import { generateToken } from "../utils/jwt.js";
 
 const router = express.Router();
 
@@ -23,16 +22,6 @@ router.get("/google/callback", (req, res, next) => {
         if (!data) {
             return res.status(401).json({ message: "Google Sign In Failed. Contact Support!" });
         }
-        const token = generateToken(data.id);
-        res.cookie("token",
-            token,
-            {
-                httpOnly: true,
-                secure: process.env.ENVIRONMENT === "prod",
-                sameSite: "none",
-                maxAge: 60 * 60 * 1000
-            }
-        );
 
         res.redirect(`${process.env.FRONTEND_URL}/auth/callback`);
     })(req, res, next);
