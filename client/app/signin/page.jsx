@@ -19,7 +19,6 @@ export default function SigninPage() {
     const handleSignin = async (values, { setSubmitting }) => {
         try {
             const res = await api.post("/auth/signin", values);
-            console.log(res);
             setAuth(res.data.user, res.data.token);
             router.push("/profile");
         } catch (err) {

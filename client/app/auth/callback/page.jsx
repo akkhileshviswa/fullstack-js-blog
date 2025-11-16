@@ -12,7 +12,7 @@ export default function AuthCallback() {
         const fetchUser = async () => {
             try {
                 const res = await api.get("/auth/profile", {withCredentials: true});
-                setAuth(res.data, null);
+                setAuth(res.data.user, res.data.token);
                 router.push("/profile");
             } catch (err) {
                 console.error("Failed to fetch user from cookie:", err);
