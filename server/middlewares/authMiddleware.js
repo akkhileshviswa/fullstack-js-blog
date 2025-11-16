@@ -17,7 +17,7 @@ export const protect = (req, res, next) => {
         res.clearCookie("token", {
             httpOnly: true,
             secure: process.env.ENVIRONMENT === "prod",
-            sameSite: "lax",
+            sameSite: "none",
         });
 
         return res.status(401).json({ message: "Session expired. Login to Continue!" });

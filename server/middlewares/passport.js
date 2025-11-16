@@ -1,5 +1,4 @@
 import passport from "passport";
-import { generateToken } from "../utils/jwt.js";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import { supabase } from "../config/supabaseClient.js";
 
@@ -46,8 +45,7 @@ passport.use(
                     finalUser = user;
                 }
 
-                const token = generateToken(finalUser.id);
-                done(null, { user: finalUser, token });
+                done(null, finalUser);
             } catch (err) {
                 done(err, null);
             }
