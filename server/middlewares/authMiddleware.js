@@ -1,5 +1,21 @@
 import { verifyToken } from "../utils/jwt.js";
 
+/**
+ * Authentication middleware to protect routes.
+ * Verifies JWT token from Authorization header or cookies and attaches user to request.
+ * 
+ * @param {Object} req - Express request object
+ * @param {Object} req.headers - Request headers
+ * @param {string} [req.headers.authorization] - Bearer token in Authorization header
+ * @param {Object} req.cookies - Request cookies
+ * @param {string} [req.cookies.token] - JWT token in cookie
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function
+ * @returns {void} Calls next() if authenticated, sends 401 response if not
+ * 
+ * @throws {Error} If no token is provided - returns 401 with "Not authenticated" message
+ * @throws {Error} If token is invalid or expired - returns 401 with "Session expired" message
+ */
 export const protect = (req, res, next) => {
     let token = null;
 

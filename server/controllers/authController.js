@@ -3,6 +3,26 @@ import { signupSchema, signinSchema } from "../utils/validationSchemas.js";
 import { generateToken } from "../utils/jwt.js";
 import { supabase } from "../config/supabaseClient.js";
 
+/**
+ * Handles user registration/signup.
+ * Validates input, checks for existing username, hashes password, and creates new user.
+ * 
+ * @async
+ * @function signup
+ * @param {Object} req - Express request object
+ * @param {Object} req.body - Request body containing user registration data
+ * @param {string} req.body.name - User's full name (min 5, max 30 characters)
+ * @param {string} req.body.username - User's username (min 5, max 30 characters)
+ * @param {string} req.body.password - User's password (min 6 characters)
+ * @param {Object} res - Express response object
+ * @returns {Promise<void>} Sends JSON response with user data, token, or error
+ * 
+ * @throws {Error} If validation fails - returns 400 with validation error message
+ * @throws {Error} If username already exists - returns 400 with error message
+ * @throws {Error} If database query fails - returns 500 with error message
+ * @throws {Error} If user creation fails - returns 500 with error message
+ * @throws {Error} If server error occurs - returns 500 with error message
+ */
 export const signup = async (req, res) => {
     try {
         const validation_result = signupSchema.safeParse(req.body);
@@ -55,6 +75,26 @@ export const signup = async (req, res) => {
     }
 };
 
+/**
+ * Handles user authentication/signin.
+ * Validates credentials, verifies password, and returns JWT token.
+ * 
+ * @async
+ * @function signin
+ * @param {Object} req - Express request object
+ * @param {Object} req.body - Request body containing user credentials
+ * @param {string} req.body.username - User's username
+ * @param {string} req.body.password - User's password
+ * @param {Object} res - Express response object
+ * @returns {Promise<void>} Sends JSON response with user data, token, or error
+ * 
+ * @throws {Error} If validation fails - returns 400 with validation error message
+ * @throws {Error} If fields are missing - returns 401 with error message
+ * @throws {Error} If database query fails - returns 404 with error message
+ * @throws {Error} If user not found - returns 401 with "Invalid credentials" message
+ * @throws {Error} If password doesn't match - returns 401 with "Invalid credentials" message
+ * @throws {Error} If server error occurs - returns 500 with error message
+ */
 export const signin = async (req, res) => {
     try {
         const validation_result = signinSchema.safeParse(req.body);
@@ -102,6 +142,20 @@ export const signin = async (req, res) => {
     }
 };
 
+/**
+ * Retrieves the authenticated user's profile information.
+ * 
+ * @async
+ * @function getProfile
+ * @param {Object} req - Express request object
+ * @param {Object} req.user - Authenticated user object from protect middleware
+ * @param {string|number} req.user.id - User ID
+ * @param {Object} res - Express response object
+ * @returns {Promise<void>} Sends JSON response with user profile data or error
+ * 
+ * @throws {Error} If database query fails - returns 404 with error message
+ * @throws {Error} If user not found - returns 401 with "Invalid credentials" message
+ */
 export const getProfile = async (req, res) => {
 
     const { data, error } = await supabase
@@ -122,6 +176,15 @@ export const getProfile = async (req, res) => {
     res.status(200).json({ id: data.id, name: data.name });
 };
 
+/**
+ * Handles user logout by clearing authentication cookie.
+ * 
+ * @async
+ * @function logout
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @returns {Promise<void>} Sends JSON response with success message
+ */
 export const logout = async (req, res) => {
     res.clearCookie("token", {
         httpOnly: true,
