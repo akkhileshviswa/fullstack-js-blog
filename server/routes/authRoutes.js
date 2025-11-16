@@ -19,10 +19,18 @@ router.get("/google/callback", (req, res, next) => {
             res.status(500).json({ message: "Internal server error" });
         }
 
-        if (!data) {
+        if (!data.user || !data.token) {
             return res.status(401).json({ message: "Google Sign In Failed. Contact Support!" });
-        }
-
+        } 
+        res.cookie("token",
+            data.token,
+            {
+                httpOnly: true,
+                secure: process.env.ENVIRONMENT === "prod",
+                sameSite: "none",
+                maxAge: 60 * 60 * 1000
+            }
+        );
         res.redirect(`${process.env.FRONTEND_URL}/auth/callback`);
     })(req, res, next);
 });

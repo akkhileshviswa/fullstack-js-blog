@@ -45,16 +45,7 @@ passport.use(
 
                     finalUser = user;
                 }
-                const token = generateToken(data.id);
-                res.cookie("token",
-                    token,
-                    {
-                        httpOnly: true,
-                        secure: process.env.ENVIRONMENT === "prod",
-                        sameSite: "none",
-                        maxAge: 60 * 60 * 1000
-                    }
-                );
+                const token = generateToken(finalUser.id);
 
                 done(null, {user:finalUser, token});
             } catch (err) {
