@@ -11,7 +11,7 @@ export default function AuthCallback() {
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                const res = await api.get("/auth/profile");
+                const res = await api.get("/auth/profile", {withCredentials: true});
                 setAuth(res.data, null);
                 router.push("/profile");
             } catch (err) {
