@@ -6,7 +6,7 @@ export default function HomePage() {
     const router = useRouter();
 
     const handleGoogleLogin = () => {
-        window.location.href = `${process.env.SERVER_URL}/auth/google`;
+        window.location.href = `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/google`;
     };
 
     return (
