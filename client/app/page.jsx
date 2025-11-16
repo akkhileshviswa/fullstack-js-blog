@@ -2,9 +2,25 @@
 
 import { useRouter } from "next/navigation";
 
+/**
+ * HomePage component - Renders the main landing page with authentication options.
+ * Provides buttons for sign up, sign in, and Google OAuth login.
+ *
+ * @returns {JSX.Element} The home page component with navigation buttons
+ */
 export default function HomePage() {
     const router = useRouter();
 
+    /**
+     * Handles Google OAuth login by redirecting to the backend Google authentication endpoint.
+     * Redirects the entire window to the Google OAuth URL.
+     *
+     * @function handleGoogleLogin
+     * @returns {void}
+     *
+     * @throws {Error} If NEXT_PUBLIC_BACKEND_URL environment variable is not set
+     * @throws {Error} If the redirect URL is invalid or unreachable
+     */
     const handleGoogleLogin = () => {
         window.location.href = `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/google`;
     };

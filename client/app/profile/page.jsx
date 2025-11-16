@@ -4,17 +4,41 @@ import { useRouter } from "next/navigation";
 import { useAuthStore } from "../store/useAuthStore";
 import api from "../utils/api";
 
+/**
+ * ProfilePage component - Displays the user's profile information.
+ * Fetches and displays user profile data on mount.
+ *
+ * @returns {JSX.Element} The profile page component with user info and navigation buttons
+ */
 export default function ProfilePage() {
     const router = useRouter();
     const { logout } = useAuthStore();
     const [profile, setProfile] = useState(null);
 
+    /**
+     * Handles user logout by calling the logout function and redirecting to home.
+     *
+     * @async
+     * @function handleLogout
+     * @returns {Promise<void>} Resolves when logout is complete and navigation occurs
+     */
     const handleLogout = async () => {
         await logout();
         router.push("/");
     };
 
     useEffect(() => {
+        /**
+         * Fetches the current user's profile data from the API.
+         * Retrieves profile information and updates the component state.
+         *
+         * @async
+         * @function fetchProfile
+         * @returns {Promise<void>} Resolves when profile is fetched and state is updated
+         *
+         * @throws {Error} If API request fails - logs error to console
+         * @throws {Error} If user is unauthorized (401) - redirects to /signin
+         */
         const fetchProfile = async () => {
             try {
                 const localToken = localStorage.getItem("token");

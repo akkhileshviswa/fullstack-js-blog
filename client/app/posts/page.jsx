@@ -7,6 +7,12 @@ import ConfirmModal from "../components/ConfirmModal";
 
 const POSTS_PER_PAGE = 3;
 
+/**
+ * AllPostsPage component - Renders a page displaying all blog posts with pagination and search.
+ * Provides functionality to view, search, and delete posts.
+ *
+ * @returns {JSX.Element} The all posts page component with post list, search, and pagination
+ */
 export default function AllPostsPage() {
     const [posts, setPosts] = useState([]);
     const [deleteId, setDeleteId] = useState(null);
@@ -16,6 +22,19 @@ export default function AllPostsPage() {
     const [loading, setLoading] = useState(false);
     const router = useRouter();
 
+    /**
+     * Fetches posts from the API with pagination and optional search query.
+     * Updates the posts state and pagination information.
+     *
+     * @async
+     * @function fetchPosts
+     * @param {number} [pageNum=1] - The page number to fetch (default: 1)
+     * @param {string} [query=""] - The search query string (default: empty string)
+     * @returns {Promise<void>} Resolves when posts are fetched and state is updated
+     *
+     * @throws {Error} If API request fails - logs error to console
+     * @throws {Error} If user is unauthorized (401) - redirects to /signin
+     */
     const fetchPosts = async (pageNum = 1, query = "") => {
         try {
             setLoading(true);
@@ -43,11 +62,31 @@ export default function AllPostsPage() {
         fetchPosts();
     }, []);
 
+    /**
+     * Handles the search form submission.
+     * Resets to page 1 and fetches posts with the search query.
+     *
+     * @function handleSearch
+     * @param {Event} e - The form submit event
+     * @returns {void}
+     */
     const handleSearch = (e) => {
         e.preventDefault();
         fetchPosts(1, search);
     };
 
+    /**
+     * Handles the deletion of a post.
+     * Sends a DELETE request and updates the posts list on success.
+     *
+     * @async
+     * @function handleDelete
+     * @returns {Promise<void>} Resolves when post is deleted and list is refreshed
+     *
+     * @throws {Error} If API request fails - logs error to console
+     * @throws {Error} If user is unauthorized (401) - redirects to /signin
+     * @throws {Error} If post deletion is rejected by server
+     */
     const handleDelete = async () => {
         try {
             const token = localStorage.getItem("token");
