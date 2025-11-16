@@ -10,7 +10,7 @@ export default function CreatePostPage() {
         try {
             const token = localStorage.getItem("token");
             await api.post("/posts/create", data, {
-                headers: { Authorization: `Bearer ${token}` },
+                headers: token ? { Authorization: `Bearer ${token}` } : {},
             });
             router.push("/posts");
         } catch (err) {

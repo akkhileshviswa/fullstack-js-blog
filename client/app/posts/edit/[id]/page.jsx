@@ -14,7 +14,8 @@ export default function EditPostPage() {
             try {
                 const token = localStorage.getItem("token");
                 const res = await api.get(`/posts/${params.id}`, {
-                headers: { Authorization: `Bearer ${token}` }});
+                    headers: token ? { Authorization: `Bearer ${token}` } : {} }
+                );
                 setPost(res.data.posts);
             } catch (err) {
                 console.error(err);
