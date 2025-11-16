@@ -31,7 +31,7 @@ export default function EditPostPage() {
         try {
             const token = localStorage.getItem("token");
             await api.put(`/posts/${params.id}`, data, {
-                headers: { Authorization: `Bearer ${token}` },
+                headers: token ? { Authorization: `Bearer ${token}` } : {} },
             });
             router.push("/posts");
         } catch (err) {
