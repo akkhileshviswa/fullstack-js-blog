@@ -1,6 +1,24 @@
 import { postSchema } from "../utils/validationSchemas.js";
 import { supabase } from "../config/supabaseClient.js";
 
+/**
+ * Retrieves all posts for the authenticated user with pagination and search.
+ * 
+ * @async
+ * @function showAllPosts
+ * @param {Object} req - Express request object
+ * @param {Object} req.user - Authenticated user object from protect middleware
+ * @param {string|number} req.user.id - User ID
+ * @param {Object} req.query - Query parameters
+ * @param {string|number} [req.query.page=1] - Page number for pagination
+ * @param {string|number} [req.query.limit=4] - Number of posts per page
+ * @param {string} [req.query.search=""] - Search query to filter posts by title
+ * @param {Object} res - Express response object
+ * @returns {Promise<void>} Sends JSON response with posts, pagination info, or error
+ * 
+ * @throws {Error} If database query fails - returns 500 with error message
+ * @throws {Error} If server error occurs - returns 500 with error message
+ */
 export const showAllPosts = async (req, res) => {
     try {
         const { page = 1, limit = 4, search = "" } = req.query;
@@ -37,6 +55,24 @@ export const showAllPosts = async (req, res) => {
     }
 };
 
+/**
+ * Creates a new blog post for the authenticated user.
+ * 
+ * @async
+ * @function createPost
+ * @param {Object} req - Express request object
+ * @param {Object} req.user - Authenticated user object from protect middleware
+ * @param {string|number} req.user.id - User ID
+ * @param {Object} req.body - Request body containing post data
+ * @param {string} req.body.title - Post title (min 5 characters)
+ * @param {string} req.body.content - Post content (min 5 characters)
+ * @param {Object} res - Express response object
+ * @returns {Promise<void>} Sends JSON response with success message or error
+ * 
+ * @throws {Error} If validation fails - returns 400 with validation error message
+ * @throws {Error} If database insert fails - returns 500 with error message
+ * @throws {Error} If server error occurs - returns 500 with error message
+ */
 export const createPost = async (req, res) => {
     try {
         const validation_result = postSchema.safeParse(req.body);
@@ -73,6 +109,21 @@ export const createPost = async (req, res) => {
     }
 };
 
+/**
+ * Retrieves a single post by ID for editing.
+ * 
+ * @async
+ * @function editPost
+ * @param {Object} req - Express request object
+ * @param {Object} req.params - Route parameters
+ * @param {string} req.params.id - Post ID to retrieve
+ * @param {Object} res - Express response object
+ * @returns {Promise<void>} Sends JSON response with post data or error
+ * 
+ * @throws {Error} If database query fails - returns 500 with error message
+ * @throws {Error} If post not found - returns 500 with error message
+ * @throws {Error} If server error occurs - returns 500 with error message
+ */
 export const editPost = async (req, res) => {
     try {
         const { data, error: postError } = await supabase
@@ -96,6 +147,24 @@ export const editPost = async (req, res) => {
     }
 };
 
+/**
+ * Updates an existing blog post by ID.
+ * 
+ * @async
+ * @function updatePost
+ * @param {Object} req - Express request object
+ * @param {Object} req.params - Route parameters
+ * @param {string} req.params.id - Post ID to update
+ * @param {Object} req.body - Request body containing updated post data
+ * @param {string} req.body.title - Updated post title (min 5 characters)
+ * @param {string} req.body.content - Updated post content (min 5 characters)
+ * @param {Object} res - Express response object
+ * @returns {Promise<void>} Sends JSON response with success message or error
+ * 
+ * @throws {Error} If validation fails - returns 400 with validation error message
+ * @throws {Error} If database update fails - returns 500 with error message
+ * @throws {Error} If server error occurs - returns 500 with error message
+ */
 export const updatePost = async (req, res) => {
     try {
         const validation_result = postSchema.safeParse(req.body);
@@ -129,6 +198,20 @@ export const updatePost = async (req, res) => {
     }
 };
 
+/**
+ * Deletes a blog post by ID.
+ * 
+ * @async
+ * @function deletePost
+ * @param {Object} req - Express request object
+ * @param {Object} req.params - Route parameters
+ * @param {string} req.params.id - Post ID to delete
+ * @param {Object} res - Express response object
+ * @returns {Promise<void>} Sends JSON response with success message or error
+ * 
+ * @throws {Error} If database delete fails - returns 500 with error message
+ * @throws {Error} If server error occurs - returns 500 with error message
+ */
 export const deletePost = async (req, res) => {
     try {
         const { data, error: postError } = await supabase

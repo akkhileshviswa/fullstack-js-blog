@@ -10,6 +10,25 @@ passport.use(
             clientSecret: process.env.GOOGLE_CLIENT_SECRET,
             callbackURL: `${process.env.SERVER_URL}/auth/google/callback`,
         },
+        /**
+         * Google OAuth strategy callback function.
+         * Handles user authentication/registration via Google OAuth.
+         * Checks if user exists, creates new user if needed, and generates JWT token.
+         * 
+         * @async
+         * @function googleStrategyCallback
+         * @param {string} accessToken - Google OAuth access token
+         * @param {string} refreshToken - Google OAuth refresh token
+         * @param {Object} profile - Google user profile object
+         * @param {string} profile.id - Google user ID
+         * @param {string} profile.displayName - Google user display name
+         * @param {Function} done - Passport callback function
+         * @returns {Promise<void>} Calls done callback with user data or error
+         * 
+         * @throws {Error} If database query fails - passed to done callback
+         * @throws {Error} If user creation fails - passed to done callback
+         * @throws {Error} If token generation fails - passed to done callback
+         */
         async (accessToken, refreshToken, profile, done) => {
             try {
                 const { data: user, error: userError } = await supabase
