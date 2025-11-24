@@ -15,6 +15,11 @@
 - Cookies secured with httpOnly, sameSite, and secure flags.
 - Credentials and posts are stored in supabase with Row Level Security enabled.
 - Reusable componenets for both create and edit modes.
+- Hosted frontend in **Vercel** and backend in **Render**
+- Front-end URL: https://fullstack-js-blog.vercel.app/
+- Back-end URL: https://fullstack-js-blog.onrender.com/
+
+
 
 ## Setup Instructions
 ```bash
