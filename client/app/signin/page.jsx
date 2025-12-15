@@ -8,13 +8,15 @@ import AuthForm from "../components/AuthForm";
 export default function SigninPage() {
     const router = useRouter();
     const setAuth = useAuthStore((state) => state.setAuth);
-    const token = useAuthStore((state) => state.token);
+    const { token, hasHydrated } = useAuthStore();
 
     useEffect(() => {
+        if (!hasHydrated) return;
+
         if (token) {
             router.replace("/profile");
         }
-    }, [token]);
+    }, [token, hasHydrated]);
 
     const handleSignin = async (values, { setSubmitting }) => {
         try {
